@@ -8,7 +8,8 @@ class App extends Component {
     super(props) 
     this.state = {
       users: [],
-      selectedUser: {}
+      selectedUser: {},
+      loading: false
     }
   }
 
@@ -17,13 +18,18 @@ class App extends Component {
   }
   
   getData = () => {
-    fetch('http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}')
-    .then((result) => {
-      return result.json()
-    })
-    .then((data) => {
-      this.setState({
-        users: data
+    this.setState({
+      loading: true
+    }, () => {
+      fetch('http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}')
+      .then((result) => {
+        return result.json()
+      })
+      .then((data) => {
+        this.setState({
+          loading: false,
+          users: data
+        })
       })
     })
   }
@@ -79,19 +85,20 @@ class App extends Component {
 
     return (
       <div>
-       <table>
-        <tbody>
-          <tr>
-            <th>id</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>email</th>
-            <th>phone</th>
-          </tr>
+        <table>
+          <tbody> 
+            <tr>
+              <th>id</th>
+              <th>firstName</th>
+              <th>lastName</th>
+              <th>email</th>
+              <th>phone</th>
+            </tr>
           {rows}
-        </tbody>
-       </table>
-       {this.renderSelected()}
+          </tbody>
+        </table>
+        {this.state.loading && <p>Loading...</p>}
+      {this.renderSelected()}
       </div>
     )
   }
