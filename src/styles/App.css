@@ -1,0 +1,17 @@
+table {
+  border: 1px solid grey;
+  border-collapse: collapse;
+} 
+
+th {
+  padding: 10px;
+  border: 1px solid grey;
+  text-align: left;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid grey;
+  text-align: left;
+} 
+
