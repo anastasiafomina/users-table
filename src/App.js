@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import './styles/App.css'
 
+const links = {
+  small: 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}',
+  large: 'http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
+}
 
 class App extends Component {
 
@@ -9,7 +13,8 @@ class App extends Component {
     this.state = {
       users: [],
       selectedUser: {},
-      loading: false
+      loading: false,
+      link: 'small'
     }
   }
 
@@ -19,9 +24,11 @@ class App extends Component {
   
   getData = () => {
     this.setState({
-      loading: true
+      loading: true,
+      users: [],
+      selectedUser: {}
     }, () => {
-      fetch('http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}')
+      fetch(links[this.state.link])
       .then((result) => {
         return result.json()
       })
@@ -80,11 +87,36 @@ class App extends Component {
     )
   }
 
+  chooseSmall = () => {
+    this.setState ({
+      link: 'small'
+    }, () => 
+      this.getData()
+    )
+  }
+
+  chooseLarge = () => {
+    this.setState ({
+      link: 'large'
+    }, () => 
+      this.getData()
+    )
+  }
+
   render() {
     const rows = this.state.users.map(this.renderRow)
 
     return (
       <div>
+
+        <p>Выберете набор данных:</p>
+        
+        <input type="radio" name="dataVolume" id="smallData" onChange={this.chooseSmall} checked={this.state.link === 'small'} />
+        <label htmlFor="smallData"> Маленький </label>
+        <input type="radio" name="dataVolume" id="largeData" onChange={this.chooseLarge} checked={this.state.link === 'large'} />
+        <label htmlFor="largeData"> Большой </label> 
+      
+
         <table>
           <tbody> 
             <tr>
@@ -97,6 +129,7 @@ class App extends Component {
           {rows}
           </tbody>
         </table>
+        
         {this.state.loading && <p>Loading...</p>}
       {this.renderSelected()}
       </div>
