@@ -44,6 +44,11 @@ class App extends Component {
   selectUser = (item) => {
     this.setState({ 
       selectedUser: item
+    }, () => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      })
     })
   }
   
@@ -54,6 +59,7 @@ class App extends Component {
       <tr 
         key={item.id + item.firstName + item.lastName} 
         onClick={() => this.selectUser(item)}
+        className={ (item.id === this.state.selectedUser.id && item.firstName === this.state.selectedUser.firstName) ? 'selected' : '' }
       >
         <td>{id}</td>
         <td>{firstName}</td>
@@ -111,9 +117,23 @@ class App extends Component {
 
         <p>Выберете набор данных:</p>
         
-        <input type="radio" name="dataVolume" id="smallData" onChange={this.chooseSmall} checked={this.state.link === 'small'} />
+        <input 
+          type="radio" 
+          name="dataVolume" 
+          id="smallData" 
+          onChange={this.chooseSmall} 
+          checked={this.state.link === 'small'} 
+          disabled={this.state.loading} 
+        />
         <label htmlFor="smallData"> Маленький </label>
-        <input type="radio" name="dataVolume" id="largeData" onChange={this.chooseLarge} checked={this.state.link === 'large'} />
+        <input 
+          type="radio" 
+          name="dataVolume" 
+          id="largeData" 
+          onChange={this.chooseLarge} 
+          checked={this.state.link === 'large'} 
+          disabled={this.state.loading} 
+        />
         <label htmlFor="largeData"> Большой </label> 
       
 
