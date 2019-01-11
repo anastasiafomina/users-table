@@ -7,7 +7,8 @@ class App extends Component {
   constructor(props) {
     super(props) 
     this.state = {
-      users: []
+      users: [],
+      selectedUser: {}
     }
   }
 
@@ -26,20 +27,52 @@ class App extends Component {
       })
     })
   }
-  
- renderRow = (item) => {
-  const { id, firstName, lastName, email, phone } = item
 
-  return (
-    <tr>
-      <td>{id}</td>
-      <td>{firstName}</td>
-      <td>{lastName}</td>
-      <td>{email}</td>
-      <td>{phone}</td>
-    </tr>
-   )
- }
+  selectUser = (item) => {
+    this.setState({ 
+      selectedUser: item
+    })
+  }
+  
+  renderRow = (item) => {
+    const { id, firstName, lastName, email, phone } = item
+
+    return (
+      <tr 
+        key={item.id + item.firstName + item.lastName} 
+        onClick={() => this.selectUser(item)}
+      >
+        <td>{id}</td>
+        <td>{firstName}</td>
+        <td>{lastName}</td>
+        <td>{email}</td>
+        <td>{phone}</td>
+      </tr>
+    )
+  }
+
+  renderSelected = () => {
+    const { selectedUser } = this.state
+
+    if (!selectedUser.id) {
+      return null
+    }
+
+    return (
+      <div>
+        <p>Выбран пользователь 
+          <b> {selectedUser.firstName + ', ' + selectedUser.lastName} 
+          </b>
+          <br/>Описание:
+          <br/>{selectedUser.description}
+          <br/>Адрес проживания: <b> {selectedUser.address.streetAddress}</b>
+          <br/>Город: <b>{selectedUser.address.city}</b>
+          <br/>Провинция/штат: <b>{selectedUser.address.state}</b>
+          <br/>Индекс: <b>{selectedUser.address.zip}</b>
+        </p>
+      </div>
+    )
+  }
 
   render() {
     const rows = this.state.users.map(this.renderRow)
@@ -58,6 +91,7 @@ class App extends Component {
           {rows}
         </tbody>
        </table>
+       {this.renderSelected()}
       </div>
     )
   }
