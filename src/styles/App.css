@@ -1,4 +1,10 @@
 
 .selected {
-    background-color: #ffff99;
+  background-color: #ffff99;
+}
+
+.errorCatched {
+  margin-top:10px;
+  color: red;
+  font-weight:bold
 }

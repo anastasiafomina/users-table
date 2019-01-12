@@ -14,7 +14,8 @@ class App extends Component {
       users: [],
       selectedUser: {},
       loading: false,
-      link: 'small'
+      link: 'small',
+      error: ''
     }
   }
 
@@ -36,6 +37,12 @@ class App extends Component {
         this.setState({
           loading: false,
           users: data
+        })
+      })
+      .catch((e) =>{
+        this.setState({
+          error: e.message,
+          loading: false
         })
       })
     })
@@ -151,7 +158,10 @@ class App extends Component {
         </table>
         
         {this.state.loading && <p>Loading...</p>}
-      {this.renderSelected()}
+
+        {this.renderSelected()}
+
+        {this.state.error.length > 0 && <p className="errorCatched">Error: {this.state.error}</p>}
       </div>
     )
   }
