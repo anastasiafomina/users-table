@@ -27,7 +27,8 @@ class App extends Component {
     this.setState({
       loading: true,
       users: [],
-      selectedUser: {}
+      selectedUser: {},
+      error: ''
     }, () => {
       fetch(links[this.state.link])
       .then((result) => {
@@ -116,6 +117,15 @@ class App extends Component {
     )
   }
 
+  sortByField = (field) => {
+    this.setState({
+      users: [...this.state.users].sort((a, b) => {
+        if (a[field] === b[field]) { return 0 }
+        return a[field] > b[field] ? 1 : -1
+      })
+    })
+  }
+
   render() {
     const rows = this.state.users.map(this.renderRow)
 
@@ -147,15 +157,16 @@ class App extends Component {
         <table>
           <tbody> 
             <tr>
-              <th>id</th>
-              <th>firstName</th>
-              <th>lastName</th>
-              <th>email</th>
-              <th>phone</th>
+              <th onClick={() => this.sortByField("id")}>id</th>
+              <th onClick={() => this.sortByField("firstName")}>firstName</th>
+              <th onClick={() => this.sortByField("lastName")}>lastName</th>
+              <th onClick={() => this.sortByField("email")}>email</th>
+              <th onClick={() => this.sortByField("phone")}>phone</th>
             </tr>
           {rows}
           </tbody>
         </table>
+        
         
         {this.state.loading && <p>Loading...</p>}
 
