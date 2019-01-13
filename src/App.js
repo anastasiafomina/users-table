@@ -15,7 +15,9 @@ class App extends Component {
       selectedUser: {},
       loading: false,
       link: 'small',
-      error: ''
+      error: '',
+      sortedBy: '',
+      sortDirection: ''
     }
   }
 
@@ -28,7 +30,9 @@ class App extends Component {
       loading: true,
       users: [],
       selectedUser: {},
-      error: ''
+      error: '',
+      sortedBy: '',
+      sortDirection: ''
     }, () => {
       fetch(links[this.state.link])
       .then((result) => {
@@ -118,12 +122,41 @@ class App extends Component {
   }
 
   sortByField = (field) => {
+    const direction = this.getSortDirection(field) === 'up' ? 1 : -1
+
     this.setState({
       users: [...this.state.users].sort((a, b) => {
         if (a[field] === b[field]) { return 0 }
-        return a[field] > b[field] ? 1 : -1
-      })
+        return a[field] > b[field] ? direction : direction * -1
+      }),
+      sortedBy: field,
+      sortDirection: this.getSortDirection(field)
     })
+  }
+
+  getSortDirection = (field) => {
+    if (this.state.sortedBy !== field) { 
+      return 'up' 
+    }
+    return this.state.sortDirection === 'up' ? 'down' : 'up'
+  }
+
+  renderTab = (tab) => {
+    return (
+      <th onClick={() => this.sortByField(tab)}>
+        {tab}
+        <img   
+          src={require('./assets/down-arrow.png')}
+          alt="arrow"
+          className={`arrowDown${this.state.sortedBy === tab && this.state.sortDirection === 'down' ? ' active' : ''}`}
+        />
+        <img 
+          src={require('./assets/down-arrow.png')}
+          alt="arrow"
+          className={`arrowUp${this.state.sortedBy === tab && this.state.sortDirection === 'up' ? ' active' : ''}`}
+        />
+      </th>
+    )
   }
 
   render() {
@@ -131,7 +164,6 @@ class App extends Component {
 
     return (
       <div>
-
         <p>Выберете набор данных:</p>
         
         <input 
@@ -152,21 +184,19 @@ class App extends Component {
           disabled={this.state.loading} 
         />
         <label htmlFor="largeData"> Большой </label> 
-      
 
         <table>
           <tbody> 
             <tr>
-              <th onClick={() => this.sortByField("id")}>id</th>
-              <th onClick={() => this.sortByField("firstName")}>firstName</th>
-              <th onClick={() => this.sortByField("lastName")}>lastName</th>
-              <th onClick={() => this.sortByField("email")}>email</th>
-              <th onClick={() => this.sortByField("phone")}>phone</th>
+              {this.renderTab("id")}
+              {this.renderTab("firstName")}
+              {this.renderTab("lastName")}
+              {this.renderTab("email")}
+              {this.renderTab("phone")}
             </tr>
           {rows}
           </tbody>
         </table>
-        
         
         {this.state.loading && <p>Loading...</p>}
 

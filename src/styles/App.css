@@ -8,3 +8,18 @@
   color: red;
   font-weight: bold;
 }
+
+.arrowDown {
+  padding-left: 10px;
+  opacity: 0.1;
+}
+
+.arrowUp {
+  padding-left: 10px;
+  opacity: 0.1;
+  transform: rotate(180deg);
+}
+
+.active {
+  opacity: 1;
+}
