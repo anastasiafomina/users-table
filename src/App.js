@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+
 import './styles/App.css'
+import Tab from './components/Tab'
 
 const links = {
   small: 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}',
@@ -143,19 +145,12 @@ class App extends Component {
 
   renderTab = (tab) => {
     return (
-      <th onClick={() => this.sortByField(tab)}>
-        {tab}
-        <img   
-          src={require('./assets/down-arrow.png')}
-          alt="arrow"
-          className={`arrowDown${this.state.sortedBy === tab && this.state.sortDirection === 'down' ? ' active' : ''}`}
-        />
-        <img 
-          src={require('./assets/down-arrow.png')}
-          alt="arrow"
-          className={`arrowUp${this.state.sortedBy === tab && this.state.sortDirection === 'up' ? ' active' : ''}`}
-        />
-      </th>
+      <Tab
+        tab={tab}
+        sortedBy={this.state.sortedBy}
+        sortDirection={this.state.sortDirection}
+        sortByField={this.sortByField}
+      />
     )
   }
 
